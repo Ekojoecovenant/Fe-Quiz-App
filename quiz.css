@@ -1,0 +1,26 @@
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(2,
+            minmax(0, 13rem)
+            /*10rem*/
+        );
+    gap: .5rem;
+    max-width: 100%;
+}
+
+button {
+    color: black;
+    padding: .4rem;
+    height: 10rem;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #bbb;
+}
+
+button:active {
+    background: #777;
+}
