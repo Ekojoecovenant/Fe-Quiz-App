@@ -8,7 +8,8 @@ let answer = "";
 
 // gets the data from the .json file
 async function fetchData() {
-  const response = await fetch("https://be-quiz-app-api.onrender.com/quiz");
+  const response = await fetch("./questions.json");
+  // const response = await fetch("https://be-quiz-app-api.onrender.com/quiz");
   const data = await response.json();
   return data;
 }
