@@ -8,7 +8,7 @@ let answer = "";
 
 // gets the data from the .json file
 async function fetchData() {
-  const response = await fetch("./questions.json");
+  const response = await fetch("https://be-quiz-app-api.onrender.com/quiz");
   const data = await response.json();
   return data;
 }
@@ -16,17 +16,14 @@ async function fetchData() {
 // gets the question and displays it
 async function mainFetch() {
   let data = await fetchData();
-  console.log("Loading result...");
   if (num >= data.length) {
     sessionStorage.setItem("right", right);
     sessionStorage.setItem("wrong", wrong);
     sessionStorage.setItem("total", total);
     window.location.href = "./result.html";
-    // console.log(num + 1, data, `Right: ${right}`, `Wrong: ${wrong}`);
     return;
   }
   data = data[num];
-  console.log(num + 1, data, `Right: ${right}`, `Wrong: ${wrong}`);
 
   question.innerHTML = `(${num + 1})<br>${data.question}`;
   option1.innerText = data.opt1;
