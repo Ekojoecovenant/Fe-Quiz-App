@@ -20,7 +20,7 @@ jobs:
     steps:
       - run: echo "Testing..."
       # simulate failure
-      - run: exit 1
+      #- run: exit 1
 
   deploy:
     runs-on: ubuntu-latest
