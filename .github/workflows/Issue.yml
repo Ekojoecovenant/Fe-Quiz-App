@@ -2,7 +2,7 @@ name: Issue Notifications
 
 on:
   issues:
-    types: [opened, edited, closed]
+    types: [opened, edited, closed, reopened]
 
 jobs:
   notify:
@@ -17,14 +17,15 @@ jobs:
             echo "msg=✏️ Issue Edited: #${{ github.event.issue.number }} - ${{ github.event.issue.title }}" >> $GITHUB_OUTPUT
           elif [ "${{ github.event.action }}" = "closed" ]; then
             echo "msg=🔴 Issue Closed: #${{ github.event.issue.number }} - ${{ github.event.issue.title }}" >> $GITHUB_OUTPUT
+          elif [ "${{ github.event.action }}" = "reopened" ]; then
+            echo "msg=♻️ Issue Reopened: #${{ github.event.issue.number }} - ${{ github.event.issue.title }}" >> $GITHUB_OUTPUT
           fi
 
-      # ✅ Discord notification
       - name: Send to Discord
         uses: Ilshidur/action-discord@v2
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          args: ${{ steps.msg.outputs.msg }}
+          args: "${{ steps.msg.outputs.msg }}"
 
       # ✅ Email notification
       # - name: Send Email
