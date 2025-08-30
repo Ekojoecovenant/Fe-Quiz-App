@@ -1,6 +1,12 @@
 name: Hello World
 
-on: push # Trigger workflow on every push
+on:
+  push:
+    branches:
+      - version-2.0
+  pull_request:
+    branches:
+      - main
 
 jobs:
   say-hello:
