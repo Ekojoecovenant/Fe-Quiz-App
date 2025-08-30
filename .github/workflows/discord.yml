@@ -37,7 +37,7 @@ jobs:
         run: |
           if [ "${{ needs.test.result }}" == "success" ]; then
             curl -H "Content-Type: application/json" \
-                 -d '{"content":"✅ Workflow succeeded! 🎉"}' \
+                 -d '{"content":"🚀✅ Deployment successful! Commit: $GITHUB_SHA by $GITHUB_ACTOR"}' \
                  ${{ secrets.DISCORD_WEBHOOK_URL }}
           else
             curl -H "Content-Type: application/json" \

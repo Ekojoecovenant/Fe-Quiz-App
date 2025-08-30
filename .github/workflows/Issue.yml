@@ -1,0 +1,40 @@
+name: Issue Notifier - Discord
+
+on:
+  issues:
+    types: [opened, edited, closed] # Trigger only when an issue is opened
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Discord about new issue
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          case "${{github.event.action}}" in
+            opened)
+              MESSAGE="🐞🆕 A new issue was opened!\n
+              **Title:** ${{github.event.issue.title}}\n
+              **By:** ${{github.event.issue.user.login}}\n
+              🔗 ${{github.event.issue.html_url }}"
+              ;;
+              
+            edited)
+              MESSAGE="🐞✏️ Issue was edited!\n
+              **Title:** ${{github.event.issue.title}}\n
+              **Edited By:** ${{github.event.issue.user.login}}\n
+              🔗 ${{github.event.issue.html_url }}"
+              ;;
+              
+            closed)
+              MESSAGE="🐞✅ Issue was closed!\n
+              **Title:** ${{github.event.issue.title}}\n
+              **Closed By:** ${{github.event.issue.user.login}}\n
+              🔗 ${{github.event.issue.html_url }}"
+              ;;
+            esac
+
+            curl -H "Content-Type: application/json" \
+              -d '{\"content\": \"$MESSAGE\"}" \
+              $DISCORD_WEBHOOK_URL
