@@ -1,8 +1,6 @@
 name: Issue Workflow Example
 
-on:
-  issues:
-    types: [opened]
+on: issues 
 
 jobs:
   greet-new-issue:
