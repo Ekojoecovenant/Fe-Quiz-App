@@ -4,43 +4,13 @@ on:
   push:
     branches:
       - version-2.0
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  lint:
+  notify-discord:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Linting..."
-
-  test:
-    runs-on: ubuntu-latest
-    needs: lint
-    steps:
-      - run: echo "Testing..."
-      # simulate failure
-      #- run: exit 1
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - run: echo "Deploying..."
-
-  notify:
-    runs-on: ubuntu-latest
-    needs: [lint, test, deploy] # wait for all jobs
-    if: always() # run regardless of workflow outcome
-    steps:
-      - name: Send Discord Notification
+      - name: Send Discord Notification on Push
         run: |
-          if [ "${{ needs.test.result }}" == "success" ]; then
-            curl -H "Content-Type: application/json" \
-                 -d '{"content":"🚀✅ Deployment successful! Commit: ${{github.event.commits.message}} by ${{github.event.commits.author}}"}' \
-                 ${{ secrets.DISCORD_WEBHOOK_URL }}
-          else
-            curl -H "Content-Type: application/json" \
-                 -d '{"content":"❌ Workflow failed! Check logs 🛠️"}' \
-                 ${{ secrets.DISCORD_WEBHOOK_URL }}
-          fi
+          curl -H "Content-Type: application/json" \
+          -d "{\"content\": \"🚀 A push just happened on **${GITHUB_REPOSITORY}** by **${GITHUB_ACTOR}**.\n\n📝 Commit message: ${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}\n🔗 Check it here: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}\"}" \
+          ${{ secrets.DISCORD_WEBHOOK_URL }}

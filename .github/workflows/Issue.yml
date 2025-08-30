@@ -1,40 +1,40 @@
-name: Issue Notifier - Discord
+name: Issue Notifications
 
 on:
   issues:
-    types: [opened, edited, closed] # Trigger only when an issue is opened
+    types: [opened, edited, closed]
 
 jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Notify Discord about new issue
-        env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      - name: Set custom message
+        id: msg
         run: |
-          case "${{github.event.action}}" in
-            opened)
-              MESSAGE="🐞🆕 A new issue was opened!\n
-              **Title:** ${{github.event.issue.title}}\n
-              **By:** ${{github.event.issue.user.login}}\n
-              🔗 ${{github.event.issue.html_url }}"
-              ;;
-              
-            edited)
-              MESSAGE="🐞✏️ Issue was edited!\n
-              **Title:** ${{github.event.issue.title}}\n
-              **Edited By:** ${{github.event.issue.user.login}}\n
-              🔗 ${{github.event.issue.html_url }}"
-              ;;
-              
-            closed)
-              MESSAGE="🐞✅ Issue was closed!\n
-              **Title:** ${{github.event.issue.title}}\n
-              **Closed By:** ${{github.event.issue.user.login}}\n
-              🔗 ${{github.event.issue.html_url }}"
-              ;;
-            esac
+          if [ "${{ github.event.action }}" = "opened" ]; then
+            echo "msg=🟢 New Issue Opened: #${{ github.event.issue.number }} - ${{ github.event.issue.title }}" >> $GITHUB_OUTPUT
+          elif [ "${{ github.event.action }}" = "edited" ]; then
+            echo "msg=✏️ Issue Edited: #${{ github.event.issue.number }} - ${{ github.event.issue.title }}" >> $GITHUB_OUTPUT
+          elif [ "${{ github.event.action }}" = "closed" ]; then
+            echo "msg=🔴 Issue Closed: #${{ github.event.issue.number }} - ${{ github.event.issue.title }}" >> $GITHUB_OUTPUT
+          fi
 
-            curl -H "Content-Type: application/json" \
-              -d '{\"content\": \"$MESSAGE\"}" \
-              ${{ secrets.DISCORD_WEBHOOK_URL }}
+      # ✅ Discord notification
+      - name: Send to Discord
+        uses: Ilshidur/action-discord@v2
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          args: ${{ steps.msg.outputs.msg }}
+
+      # ✅ Email notification
+      # - name: Send Email
+      #   uses: dawidd6/action-send-mail@v3
+      #   with:
+      #     server_address: smtp.gmail.com
+      #     server_port: 465
+      #     username: ${{ secrets.EMAIL_USER }}
+      #     password: ${{ secrets.EMAIL_PASS }}
+      #     subject: "GitHub Issue Notification"
+      #     to: youremail@example.com
+      #     from: GitHub Actions
+      #     body: ${{ steps.msg.outputs.msg }}
