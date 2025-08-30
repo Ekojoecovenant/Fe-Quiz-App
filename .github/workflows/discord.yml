@@ -37,7 +37,7 @@ jobs:
         run: |
           if [ "${{ needs.test.result }}" == "success" ]; then
             curl -H "Content-Type: application/json" \
-                 -d '{"content":"🚀✅ Deployment successful! Commit: $GITHUB_SHA by $GITHUB_ACTOR"}' \
+                 -d '{"content":"🚀✅ Deployment successful! Commit: ${{github.event.commits.message}} by ${{github.event.commits.author}}"}' \
                  ${{ secrets.DISCORD_WEBHOOK_URL }}
           else
             curl -H "Content-Type: application/json" \
