@@ -11,6 +11,11 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
+      - name: Debug event
+        run: |
+          echo "Action: ${{ github.event.action }}"
+          echo "Title: ${{ github.event.issue.title }}"
+
       - name: Set custom message
         id: msg
         run: |
@@ -24,6 +29,9 @@ jobs:
             echo "msg=♻️ Issue Reopened: #${{ github.event.issue.number }} - ${{ github.event.issue.title }}" >> $GITHUB_OUTPUT
           fi
 
+      - name: Show final msg
+        run: echo "${{ steps.msg.outputs.msg }}"
+
       - name: Send to Discord
         uses: Ilshidur/action-discord@v2
         with:
@@ -36,9 +44,9 @@ jobs:
       #   with:
       #     server_address: smtp.gmail.com
       #     server_port: 465
-      #     username: ${{ secrets.EMAIL_USER }}
-      #     password: ${{ secrets.EMAIL_PASS }}
+      #     username: ${{ secrets.EMAIL_USER }
+      #     password: ${{ secrets.EMAIL_PASS }
       #     subject: "GitHub Issue Notification"
       #     to: youremail@example.com
       #     from: GitHub Actions
-      #     body: ${{ steps.msg.outputs.msg }}
+      #     body: ${{ steps.msg.outputs.msg }
