@@ -1,0 +1,14 @@
+name: Hello World
+
+on: push # Trigger workflow on every push
+
+jobs:
+  say-hello:
+    runs-on: ubuntu-latest # The "runner" (virtual machine) to use
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Print message
+        run: echo "Hello, GitHub Actions!"
