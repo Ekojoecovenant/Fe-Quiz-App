@@ -1,0 +1,14 @@
+name: Issue Workflow Example
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  greet-new-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Greet new issue creator
+        run: |
+          echo "Welcome, @${{ github.event.issue.user.login }}! Thanks for opening this issue."
+          echo "We'll review it shortly."
