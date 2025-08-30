@@ -33,14 +33,14 @@ jobs:
         run: echo "${{ steps.msg.outputs.msg }}"
 
       - name: Send to Discord
-        uses: Ilshidur/action-discord@v2
+        uses: Ilshidur/action-discord@0.4.0
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
           args: "${{ steps.msg.outputs.msg }}"
 
       # ✅ Email notification
       - name: Send Email
-        uses: dawidd6/action-send-mail@v3
+        uses: dawidd6/action-send-mail@master
         with:
           server_address: smtp.gmail.com
           server_port: 465
