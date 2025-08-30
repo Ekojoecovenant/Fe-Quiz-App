@@ -1,0 +1,16 @@
+name: Discord Notification
+
+on:
+  push:
+    branches:
+      - version-2.0
+
+jobs:
+  notify-discord:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Discord Notification on Push
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d "{\"content\": \"🚀 A push just happened on **${GITHUB_REPOSITORY}** by **${GITHUB_ACTOR}**.\n\n📝 Commit message: ${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}\n🔗 Check it here: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}\"}" \
+          ${{ secrets.DISCORD_WEBHOOK_URL }}

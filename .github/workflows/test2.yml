@@ -1,0 +1,11 @@
+name: CI on Push
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run a script
+        run: echo "Code pushed! Running CI..."
