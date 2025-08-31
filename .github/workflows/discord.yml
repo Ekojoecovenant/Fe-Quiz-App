@@ -15,7 +15,7 @@ jobs:
       - name: Set message
         id: msg
         run: |
-          echo "msg=🚀 A push just happened on **${GITHUB_REPOSITORY}** by **${GITHUB_ACTOR}**.\n\n📝 Commit message: ${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}\n🔗 Check it here: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}"
+          echo "msg=🚀 A push just happened on **${GITHUB_REPOSITORY}** by **${GITHUB_ACTOR}**.\n\n📝 Commit message: ${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}\n🔗 Check it here: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}" >> $GITHUB_OUTPUT
 
       # Discord notification
       - name: Send Discord Notification
