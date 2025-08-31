@@ -23,7 +23,8 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
         with:
-          args: "${{ steps.msg.outputs.msg }}"
+          args: ""
+          # args: "${{ steps.msg.outputs.msg }}"
 
       # ✅ Email notification
       - name: Send Email Notification
