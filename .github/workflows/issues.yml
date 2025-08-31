@@ -35,9 +35,8 @@ jobs:
       - name: Send to Discord
         uses: Ilshidur/action-discord@0.4.0
         env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_ISSUES_WEBHOOK }}
         with:
-          # webhook: ${{ secrets.DISCORD_WEBHOOK_URL }
           args: "${{ steps.msg.outputs.msg }}"
 
       # ✅ Email notification

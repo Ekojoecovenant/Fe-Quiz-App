@@ -1,16 +1,39 @@
 name: Discord Notification
 
-on:
-  push:
-    branches:
-      - version-2.0
+on: push
 
 jobs:
   notify-discord:
     runs-on: ubuntu-latest
     steps:
-      - name: Send Discord Notification on Push
+      # - name: Send Discord Notification
+      #   run: |
+      #     curl -H "Content-Type: application/json" \
+      #     -d "{\"content\": \"🚀 A push just happened on **${GITHUB_REPOSITORY}** by **${GITHUB_ACTOR}**.\n\n📝 Commit message: ${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}\n🔗 Check it here: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}\"}" \
+      #     ${{ secrets.DISCORD_WEBHOOK_URL }
+
+      - name: Set message
+        id: msg
         run: |
-          curl -H "Content-Type: application/json" \
-          -d "{\"content\": \"🚀 A push just happened on **${GITHUB_REPOSITORY}** by **${GITHUB_ACTOR}**.\n\n📝 Commit message: ${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}\n🔗 Check it here: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}\"}" \
-          ${{ secrets.DISCORD_WEBHOOK_URL }}
+          echo "msg=🚀 A push just happened on **${GITHUB_REPOSITORY}** by **${GITHUB_ACTOR}**.\n\n📝 Commit message: ${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}\n🔗 Check it here: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}"
+
+      # Discord notification
+      - name: Send Discord Notification
+        uses: Ilshidur/action-discord@0.4.0
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        with:
+          args: "${{ steps.msg.outputs.msg }}"
+
+      # ✅ Email notification
+      - name: Send Email Notification
+        uses: dawidd6/action-send-mail@master
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USER }}
+          password: ${{ secrets.EMAIL_PASS }}
+          subject: "GitHub Issue Notification"
+          to: covenantekojoe@gmail.com
+          from: GitHub Actions
+          body: ${{ steps.msg.outputs.msg }}
