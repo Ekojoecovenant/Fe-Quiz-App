@@ -22,6 +22,7 @@ jobs:
         uses: Ilshidur/action-discord@0.4.0
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_USERNAME: GitHub Push
         with:
           args: ""
           # args: "${{ steps.msg.outputs.msg }}"
